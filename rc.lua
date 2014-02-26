@@ -39,9 +39,9 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+--beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 
---beautiful.init(os.getenv("HOME") .. ".config/awesome/themes/mine/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/mine/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -86,12 +86,22 @@ end
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-	names = {"main","www","skype","gimp","office","im",7,8,9},
-	layout = { layouts[1], layouts[2], layouts[1], layouts[5], layouts[6],layouts[12], layouts[9], layouts[3], layouts[7]
+	names = {"main","dev",3,4},
+	layout = { layouts[2], layouts[2], layouts[1], layouts[5]
        }}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag(tags.names, s, tags.layout)
+
+tags_alt = {
+	names = {"web","skype"},
+	layout = { layouts[1], layouts[1]
+	}}
+
+tags[1] = awful.tag(tags.names, 1, tags.layout)
+
+if screen.count()>1 then
+	for s = 2, screen.count() do
+	    -- Each screen has its own tag table.
+	    tags[s] = awful.tag(tags_alt.names, s, tags_alt.layout)
+	end
 end
 -- }}}
 
@@ -116,7 +126,7 @@ mylibreofficemenu = {
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
 				    { "LibreOffice", mylibreofficemenu, beautiful.awesome_icon },
-                                    { "Terminal", terminal },
+                                    { "Terminal", terminal,beautiful.awesome_icon },
                                     { "Web Browser", browser }
                                   }
                         })
@@ -149,13 +159,13 @@ shatzi.text = " "
 -- Create a batwidget
 -------------------------------------
 -- Initialize widget
-batwidget = wibox.widget.textbox()
+--batwidget = wibox.widget.textbox()
 
-batimg = wibox.widget.imagebox()
-batimg:set_image(awful.util.getdir("config") .. "/icons/battery.png")
+--batimg = wibox.widget.imagebox()
+--batimg:set_image(awful.util.getdir("config") .. "/icons/battery.png")
 
 -- Register widget
-vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 21, "BAT0")
+--vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 21, "BAT0")
 
 -------------------------------------
 -- gmail widget and tooltip
@@ -179,52 +189,52 @@ vicious.register(mygmail, vicious.widgets.gmail,
 -------------------------------------
 -- Volume widget
 -------------------------------------
---volumecfg = {}
---volumecfg.cardid  = 0
---volumecfg.channel = "Master"
-----volumecfg.widget = wibox.widget.textbox({name = "volumecfg.widget", align = "right" })
---volumecfg.widget = wibox.widget.textbox()
+volumecfg = {}
+volumecfg.cardid  = 0
+volumecfg.channel = "Master"
+--volumecfg.widget = wibox.widget.textbox({name = "volumecfg.widget", align = "right" })
+volumecfg.widget = wibox.widget.textbox()
 
---volumecfg_t = awful.tooltip({ objects = { volumecfg.widget },})
---volumecfg_t:set_text("Volume")
+volumecfg_t = awful.tooltip({ objects = { volumecfg.widget },})
+volumecfg_t:set_text("Volume")
 
---myvolimg = wibox.widget.imagebox()
---myvolimg:set_image(awful.util.getdir("config") .. "/icons/vol.png")
+myvolimg = wibox.widget.imagebox()
+myvolimg:set_image(awful.util.getdir("config") .. "/icons/vol.png")
 
 -- command must start with a space!
---volumecfg.mixercommand = function (command)
---       local fd = io.popen("amixer -c " .. volumecfg.cardid .. command)
---       local status = fd:read("*all")
---       fd:close()
+volumecfg.mixercommand = function (command)
+       local fd = io.popen("amixer -c " .. volumecfg.cardid .. command)
+       local status = fd:read("*all")
+       fd:close()
 
---       local volume = string.match(status, "(%d?%d?%d)%%")
---       volume = string.format("% 3d", volume)
---       status = string.match(status, "%[(o[^%]]*)%]")
---       if string.find(status, "on", 1, true) then
---               volume = volume .. "%"
---       else
---               volume = volume .. "M"
---       end
---       volumecfg.widget.text = volume
---end
---volumecfg.update = function ()
---       volumecfg.mixercommand(" sget " .. volumecfg.channel)
---end
---volumecfg.up = function ()
---       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%+")
---end
---volumecfg.down = function ()
---       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%-")
---end
---volumecfg.toggle = function ()
---       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " toggle")
---end
---volumecfg.widget:buttons({
---       button({ }, 4, function () volumecfg.up() end),
---       button({ }, 5, function () volumecfg.down() end),
---       button({ }, 1, function () volumecfg.toggle() end)
---})
---volumecfg.update()
+       local volume = string.match(status, "(%d?%d?%d)%%")
+       volume = string.format("% 3d", volume)
+       status = string.match(status, "%[(o[^%]]*)%]")
+       if string.find(status, "on", 1, true) then
+               volume = volume .. "%"
+       else
+               volume = volume .. "M"
+       end
+       volumecfg.widget.text = volume
+end
+volumecfg.update = function ()
+       volumecfg.mixercommand(" sget " .. volumecfg.channel)
+end
+volumecfg.up = function ()
+       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%+")
+end
+volumecfg.down = function ()
+       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%-")
+end
+volumecfg.toggle = function ()
+       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " toggle")
+end
+volumecfg.widget:buttons({
+       button({ }, 4, function () volumecfg.up() end),
+       button({ }, 5, function () volumecfg.down() end),
+       button({ }, 1, function () volumecfg.toggle() end)
+})
+volumecfg.update()
 
 
 -------------------------------------
@@ -324,16 +334,16 @@ vicious.register(netwidget, vicious.widgets.net, "${enp12s0 up_kb}kb/s / ${enp12
 -------------------------------------
 
 -- Initialize widget
--- mpdwidget = wibox.widget.textbox()
+ mpdwidget = wibox.widget.textbox()
 -- Register widget
--- vicious.register(mpdwidget, vicious.widgets.mpd,
---     function (widget, args)
---         if args["{state}"] == "Stop" then 
---             return " - "
---         else 
---             return args["{Artist}"]..' - '.. args["{Title}"]
---        end
---    end, 10)
+ vicious.register(mpdwidget, vicious.widgets.mpd,
+     function (widget, args)
+         if args["{state}"] == "Stop" then 
+             return " - "
+         else 
+             return args["{Artist}"]..' - '.. args["{Title}"]
+        end
+    end, 10)
 
 -------------------------------------
 --CPU widget
@@ -438,6 +448,7 @@ for s = 1, screen.count() do
     local upper_right_layout=wibox.layout.fixed.horizontal()
     if s==1 then upper_right_layout:add(mysystray) end
     upper_right_layout:add(mytextclock)
+    upper_right_layout:add(volumecfg.widget)
     upper_right_layout:add(shatzi) 
     upper_right_layout:add(weatherwidget)
     upper_right_layout:add(shatzi)
@@ -447,7 +458,7 @@ for s = 1, screen.count() do
     upper_right_layout:add(shatzi)
     upper_right_layout:add(mygmailimg)
     upper_right_layout:add(shatzi)
---    upper_right_layout:add(mpdwidget)
+    upper_right_layout:add(mpdwidget)
     upper_right_layout:add(mylayoutbox[s])
     
     -- Now, bring it all together (with the tasklist in the middle)
@@ -465,10 +476,10 @@ for s = 1, screen.count() do
 
    -- Widgets that are aligned to the left
    local bottom_middle_layout=wibox.layout.fixed.horizontal()
-   bottom_middle_layout:add(batimg)
-   bottom_middle_layout:add(shatzi)
-   bottom_middle_layout:add(batwidget)
-   bottom_middle_layout:add(spacer)
+   --bottom_middle_layout:add(batimg)
+   --bottom_middle_layout:add(shatzi)
+   --bottom_middle_layout:add(batwidget)
+   --bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(pacimg)
    bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(pacwidget)
