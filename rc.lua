@@ -187,54 +187,67 @@ vicious.register(mygmail, vicious.widgets.gmail,
 
 
 -------------------------------------
--- Volume widget
+-- Volume widget (broken)
 -------------------------------------
-volumecfg = {}
-volumecfg.cardid  = 0
-volumecfg.channel = "Master"
+--volumecfg = {}
+--volumecfg.cardid  = 0
+--volumecfg.channel = "Master"
 --volumecfg.widget = wibox.widget.textbox({name = "volumecfg.widget", align = "right" })
-volumecfg.widget = wibox.widget.textbox()
+--volumecfg.widget = wibox.widget.textbox()
 
-volumecfg_t = awful.tooltip({ objects = { volumecfg.widget },})
-volumecfg_t:set_text("Volume")
+--volumecfg_t = awful.tooltip({ objects = { volumecfg.widget },})
+--volumecfg_t:set_text("Volume")
 
 myvolimg = wibox.widget.imagebox()
 myvolimg:set_image(awful.util.getdir("config") .. "/icons/vol.png")
 
 -- command must start with a space!
-volumecfg.mixercommand = function (command)
-       local fd = io.popen("amixer -c " .. volumecfg.cardid .. command)
-       local status = fd:read("*all")
-       fd:close()
+--volumecfg.mixercommand = function (command)
+--       local fd = io.popen("amixer -c " .. volumecfg.cardid .. command)
+--       local status = fd:read("*all")
+--       fd:close()
 
-       local volume = string.match(status, "(%d?%d?%d)%%")
-       volume = string.format("% 3d", volume)
-       status = string.match(status, "%[(o[^%]]*)%]")
-       if string.find(status, "on", 1, true) then
-               volume = volume .. "%"
-       else
-               volume = volume .. "M"
-       end
-       volumecfg.widget.text = volume
-end
-volumecfg.update = function ()
-       volumecfg.mixercommand(" sget " .. volumecfg.channel)
-end
-volumecfg.up = function ()
-       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%+")
-end
-volumecfg.down = function ()
-       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%-")
-end
-volumecfg.toggle = function ()
-       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " toggle")
-end
-volumecfg.widget:buttons({
-       button({ }, 4, function () volumecfg.up() end),
-       button({ }, 5, function () volumecfg.down() end),
-       button({ }, 1, function () volumecfg.toggle() end)
-})
-volumecfg.update()
+--       local volume = string.match(status, "(%d?%d?%d)%%")
+--       volume = string.format("% 3d", volume)
+--       status = string.match(status, "%[(o[^%]]*)%]")
+--       if string.find(status, "on", 1, true) then
+--               volume = volume .. "%"
+--       else
+--               volume = volume .. "M"
+--       end
+--       volumecfg.widget.text = volume
+--end
+--volumecfg.update = function ()
+--       volumecfg.mixercommand(" sget " .. volumecfg.channel)
+--end
+--volumecfg.up = function ()
+--       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%+")
+--end
+--volumecfg.down = function ()
+--       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " 1%-")
+--end
+--volumecfg.toggle = function ()
+--       volumecfg.mixercommand(" sset " .. volumecfg.channel .. " toggle")
+--end
+--volumecfg.widget:buttons({
+--       button({ }, 4, function () volumecfg.up() end),
+--       button({ }, 5, function () volumecfg.down() end),
+--       button({ }, 1, function () volumecfg.toggle() end)
+--})
+--volumecfg.update()
+
+
+-------------------------------------
+-- Volume widget
+-------------------------------------
+volumewidget=wibox.widget.textbox()
+vicious.register(volumewidget, vicious.widgets.volume,
+	function(widget, args)
+		local label={["♫"]="O",["♪"]="M"}
+--		local label={["X"]="O",["J"]="M"}
+		return "Volume: " .. args[1] .. "% State: " .. label[args[2]]
+	end, 2, "Headphone")
+
 
 
 -------------------------------------
@@ -286,13 +299,29 @@ vicious.register(weatherwidget, vicious.widgets.weather,
 
 
 -------------------------------------
--- memory
+-- memory (textbox)
 -------------------------------------
-memwidget = wibox.widget.textbox()
-vicious.register(memwidget, vicious.widgets.mem, "$1% ($2MB/$3MB)", 13)         
+--memwidget = wibox.widget.textbox()
+--vicious.register(memwidget, vicious.widgets.mem, "$1% ($2MB/$3MB)", 13)         
 
 memimg = wibox.widget.imagebox()
 memimg:set_image(awful.util.getdir("config") .. "/icons/mem.png")
+
+-------------------------------------
+-- Memory usafe (progressbar)
+-------------------------------------
+-- Initialize widget
+memwidget=awful.widget.progressbar()
+-- Progressbar properties
+memwidget:set_width(8)
+memwidget:set_height(10)
+memwidget:set_vertical(true)
+memwidget:set_background_color("#494B4F")
+memwidget:set_border_color(nil)
+memwidget:set_color({type="linear",from={0,0},to={10,0},stops={{0,"#AECF96"},{0.5,"#88A175"},{1,"#FF5656"}}})
+-- Register widget
+vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
+
 
 -------------------------------------
 -- fs root
@@ -348,18 +377,33 @@ vicious.register(netwidget, vicious.widgets.net, "${enp12s0 up_kb}kb/s / ${enp12
 -------------------------------------
 --CPU widget
 -------------------------------------
-cpuwidget = wibox.widget.textbox()
+-- Initialize widget
+cpuwidget = awful.widget.graph()
+-- Graph properties
+cpuwidget:set_width(50)
+cpuwidget:set_background_color("#494B4F")
+cpuwidget:set_color({type="linear",from={0,0},to={10,0},stops={{0,"FF5656#"},{0.5,"#88A175"},{1,"#AECF96"}}})
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+
+--cpuwidget = wibox.widget.textbox()
 --Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")
+--vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")
 
 cpuimg = wibox.widget.imagebox()
 cpuimg:set_image(awful.util.getdir("config") .. "/icons/cpu.png")
+
+
 
 -------------------------------------
 -- Textclock
 -------------------------------------
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
+--mytextclock = awful.widget.textclock()
+
+-- Initialize widget
+datewidget = wibox.widget.textbox()
+-- Register widget
+vicious.register(datewidget,vicious.widgets.date, "%b %d, %R",60)
 
 -------------------------------------
 -- systray
@@ -447,8 +491,8 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local upper_right_layout=wibox.layout.fixed.horizontal()
     if s==1 then upper_right_layout:add(mysystray) end
-    upper_right_layout:add(mytextclock)
-    upper_right_layout:add(volumecfg.widget)
+--    upper_right_layout:add(mytextclock)
+    upper_right_layout:add(datewidget)
     upper_right_layout:add(shatzi) 
     upper_right_layout:add(weatherwidget)
     upper_right_layout:add(shatzi)
@@ -458,7 +502,6 @@ for s = 1, screen.count() do
     upper_right_layout:add(shatzi)
     upper_right_layout:add(mygmailimg)
     upper_right_layout:add(shatzi)
-    upper_right_layout:add(mpdwidget)
     upper_right_layout:add(mylayoutbox[s])
     
     -- Now, bring it all together (with the tasklist in the middle)
@@ -474,12 +517,12 @@ for s = 1, screen.count() do
    -- Create BOTTOM WiBox
    mywiboxbottom[s] = awful.wibox({ position = "bottom", screen = s, border_width=0, height=16})
 
-   -- Widgets that are aligned to the left
+	-- Widgets that are aligned to the left
+	local bottom_left_layout=wibox.layout.fixed.horizontal()
+	bottom_left_layout:add(mpdwidget)
+
+   -- Widgets that are aligned to the middle
    local bottom_middle_layout=wibox.layout.fixed.horizontal()
-   --bottom_middle_layout:add(batimg)
-   --bottom_middle_layout:add(shatzi)
-   --bottom_middle_layout:add(batwidget)
-   --bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(pacimg)
    bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(pacwidget)
@@ -510,9 +553,16 @@ for s = 1, screen.count() do
    bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(dnicon)
 
+	-- Widgets that are aligned on the right
+	local bottom_right_layout=wibox.layout.fixed.horizontal()
+	bottom_right_layout:add(myvolimg)
+	bottom_right_layout:add(volumewidget)
+
    -- Now, bring it all together (with the tasklist in the middle)
    local bottom_layout = wibox.layout.align.horizontal()
-   bottom_layout:set_middle(bottom_middle_layout)
+	bottom_layout:set_left(bottom_left_layout)
+	bottom_layout:set_middle(bottom_middle_layout)
+	bottom_layout:set_right(bottom_right_layout)
 
    -- Add upper layout to the wibox
    mywiboxbottom[s]:set_widget(bottom_layout)
@@ -784,3 +834,13 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+
+-- {{{ Essai de démarrage automatique
+
+--awful.util.spawn('urxvt -bg red',true,1)
+
+--awful.util.spawn('urxvt -bg green',true,2)
+-- }}}
+
+
