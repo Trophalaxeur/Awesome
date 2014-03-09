@@ -519,6 +519,7 @@ for s = 1, screen.count() do
 
 	-- Widgets that are aligned to the left
 	local bottom_left_layout=wibox.layout.fixed.horizontal()
+	bottom_left_layout:add(spacer)
 	bottom_left_layout:add(mpdwidget)
 
    -- Widgets that are aligned to the middle
@@ -557,6 +558,7 @@ for s = 1, screen.count() do
 	local bottom_right_layout=wibox.layout.fixed.horizontal()
 	bottom_right_layout:add(myvolimg)
 	bottom_right_layout:add(volumewidget)
+	bottom_right_layout:add(spacer)
 
    -- Now, bring it all together (with the tasklist in the middle)
    local bottom_layout = wibox.layout.align.horizontal()
@@ -756,9 +758,11 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
+    --Set autostart urxvt tests 
+     { rule = { instance = "autostartRightShell" },
+       properties = { tag = tags[1][1] } },
+     { rule = { instance = "test2" },
+       properties = { tag = tags[1][1] } },
 }
 -- }}}
 
@@ -837,10 +841,9 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 
 -- {{{ Essai de démarrage automatique
-
---awful.util.spawn('urxvt -bg red',true,1)
-
---awful.util.spawn('urxvt -bg green',true,2)
+awful.util.spawn_with_shell("urxvt -title 'Secondary' -name 'autostartRightShell'")
+awful.util.spawn_with_shell("urxvt -title 'Music' -name 'autostartRightShell'")
+awful.util.spawn_with_shell("urxvt -title 'Main' -name 'autostartRightShell'")
 -- }}}
 
 
