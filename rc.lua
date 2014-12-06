@@ -126,6 +126,7 @@ mylibreofficemenu = {
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
 				    { "LibreOffice", mylibreofficemenu, beautiful.awesome_icon },
+				    { "Skype", "skype&", beautiful.awesome_icon },
                                     { "Terminal", terminal,beautiful.awesome_icon },
                                     { "Web Browser", browser }
                                   }
@@ -245,7 +246,7 @@ vicious.register(volumewidget, vicious.widgets.volume,
 	function(widget, args)
 		local label={["♫"]="O",["♪"]="M"}
 --		local label={["X"]="O",["J"]="M"}
-		return "Volume: " .. args[1] .. "% State: " .. label[args[2]]
+		return "Volume: " .. args[1] .. "% State: "-- .. label[args[2]]
 	end, 2, "Headphone")
 
 
