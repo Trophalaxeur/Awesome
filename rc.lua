@@ -50,6 +50,8 @@ editor_cmd = terminal .. " -e " .. editor
 browser = os.getenv("BROWSER") or "firefox"
 files = "pcmanfm"
 
+font = 'Anonymous Pro 9'
+
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
@@ -289,8 +291,8 @@ vicious.register(weatherwidget, vicious.widgets.weather,
                 function (widget, args)
                     weather_t:set_text("City: " .. args["{city}"] .."\nWind: " .. args["{windkmh}"] .. "km/h " .. args["{wind}"] .. "\nSky: " .. args["{sky}"] .. "\nHumidity: " .. args["{humid}"] .. "%")
         
-            return args["{tempf}"] .. "C"
-                end, 1800, "LFPO")
+            return '<span font="' .. font .. '" color="#EEEEEE" background="#694C6E">  ' .. args["{tempc}"] .. '°C  </span>'
+                end, 1800, "LFBO")
                 --'1800': check every 30 minutes.
                 --'LFPI': Issy les moulineaux
                 --'LFPG': Paris CDG
@@ -403,8 +405,9 @@ cpuimg:set_image(awful.util.getdir("config") .. "/icons/cpu.png")
 
 -- Initialize widget
 datewidget = wibox.widget.textbox()
+local strf = '<span font="' .. font .. '" color="#EEEEEE" background="#777E76">  %b %d %R  </span>'
 -- Register widget
-vicious.register(datewidget,vicious.widgets.date, "%b %d, %R",60)
+vicious.register(datewidget,vicious.widgets.date, strf, 20)
 
 -------------------------------------
 -- systray
@@ -841,10 +844,25 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 
--- {{{ Essai de démarrage automatique
-awful.util.spawn_with_shell("urxvt -title 'Secondary' -name 'autostartRightShell'")
-awful.util.spawn_with_shell("urxvt -title 'Music' -name 'autostartRightShell'")
-awful.util.spawn_with_shell("urxvt -title 'Main' -name 'autostartRightShell'")
+-- {{{ Fonction de démarrage automatique des shells (on ne les lance qu'une seule fois)
+-- Source : http://awesome.naquadah.org/wiki/Autostart
+function run_once(prg,arg_string,pname,screen)
+  if not prg then
+    do return nil end
+  end
+
+  if not pname then
+    pname = prg
+  end
+
+  if not arg_string then
+    awful.util.spawn_with_shell("pgrep -f -u $USER -x '" .. pname .. "' || (" .. prg .. ")",screen)
+  else
+    awful.util.spawn_with_shell("pgrep -f -u $USER -x '" .. pname .. " ".. arg_string .."' || (" .. prg .. " " .. arg_string .. ")",screen)
+  end
+end
+
+run_once("urxvt","-title 'Secondary' -name 'autostartRightShell'");
+run_once("urxvt","-title 'Music' -name 'autostartRightShell'");
+run_once("urxvt","-title 'Main' -name 'autostartRightShell'");
 -- }}}
-
-
