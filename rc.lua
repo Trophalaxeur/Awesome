@@ -677,6 +677,13 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
+
+    --Print screens
+--    awful.key({        }, "Print", function() awful.util.spawn("import /home/lafesse/.screenshots/$(date +%F_%H%M%S_%N).png")    end),
+    awful.key({        }, "Print", function() awful.util.spawn("/home/lafesse/scripts/capscr.sh",false)    end),
+
+--    awful.key({        }, "Print", function() awful.util.spawn("import /home/lafesse/.screenshots/sc.png")    end),
+
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end)
 )
