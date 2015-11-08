@@ -691,9 +691,11 @@ globalkeys = awful.util.table.join(
 
     --Print screens
 --    awful.key({        }, "Print", function() awful.util.spawn("import /home/lafesse/.screenshots/$(date +%F_%H%M%S_%N).png")    end),
-    awful.key({        }, "Print", function() awful.util.spawn("/home/lafesse/scripts/capscr.sh",false)    end),
+--    awful.key({        }, "Print", function() awful.util.spawn("/home/lafesse/scripts/capscr.sh",false)    end),
 
 --    awful.key({        }, "Print", function() awful.util.spawn("import /home/lafesse/.screenshots/sc.png")    end),
+
+    awful.key({        }, "Print", function() awful.util.spawn("scrot -u 'sc_%Y%m%d_%H%M%S.png' -e 'mv $f ~/.screenshots/'")    end),
 
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end)
