@@ -43,6 +43,9 @@ end
 
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/mine/theme.lua")
 
+
+icons_dir = awful.util.getdir("config") .. "/icons/"
+
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
 editor = os.getenv("EDITOR") or "vim"
@@ -117,22 +120,25 @@ myawesomemenu = {
 }
 
 mylibreofficemenu = {
-   { "Main", 'libreoffice'},
-   { "Writer", 'libreoffice --writer'},
-   { "Calc", 'libreoffice --calc'},
-   { "Impress", 'libreoffice --impress'},
-   { "Draw", 'libreoffice --draw'},
-   { "Base", 'libreoffice --base'},
-   { "Math", 'libreoffice --math'}
+   { "Main", 'libreoffice', icons_dir .. "apps/libreoffice_libo.png"},
+   { "Writer", 'libreoffice --writer', icons_dir .. "apps/libreoffice_writer.png"},
+   { "Calc", 'libreoffice --calc', icons_dir .. "apps/libreoffice_calc.png"},
+   { "Impress", 'libreoffice --impress', icons_dir .. "apps/libreoffice_impress.png"},
+   { "Draw", 'libreoffice --draw', icons_dir .. "apps/libreoffice_draw.png"},
+   { "Base", 'libreoffice --base', icons_dir .. "apps/libreoffice_base.png"},
+   { "Math", 'libreoffice --math', icons_dir .. "apps/libreoffice_math.png"}
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-				    { "LibreOffice", mylibreofficemenu, beautiful.awesome_icon },
-				    { "Skype", "skype&", beautiful.awesome_icon },
-                                    { "Terminal", terminal,beautiful.awesome_icon },
-                                    { "Web Browser", browser }
-                                  }
-                        })
+mymainmenu = awful.menu({
+  items = {
+    { "awesome", myawesomemenu, beautiful.awesome_icon },
+		{ "LibreOffice", mylibreofficemenu, icons_dir .. "apps/libreoffice.png"},
+    { "Gimp", "gimp", icons_dir .. "apps/Gimp.png"},
+		{ "Skype", "skype&", icons_dir .. "apps/Skype.png"},
+    { "Terminal", terminal, icons_dir .. "apps/Terminal.png"},
+    { "Web Browser", browser, icons_dir .. "apps/Firefox.png" }
+  }
+})
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -177,7 +183,7 @@ mygmail = wibox.widget.textbox()
 gmail_t = awful.tooltip({ objects = { mygmail },})
 
 mygmailimg = wibox.widget.imagebox()
-mygmailimg:set_image(awful.util.getdir("config") .. "/icons/mail.png")
+mygmailimg:set_image(icons_dir .. "mail.png")
 
 vicious.register(mygmail, vicious.widgets.gmail,
                 function (widget, args)
@@ -202,7 +208,7 @@ vicious.register(mygmail, vicious.widgets.gmail,
 --volumecfg_t:set_text("Volume")
 
 myvolimg = wibox.widget.imagebox()
-myvolimg:set_image(awful.util.getdir("config") .. "/icons/vol.png")
+myvolimg:set_image(icons_dir .. "vol.png")
 
 -- command must start with a space!
 --volumecfg.mixercommand = function (command)
@@ -259,7 +265,7 @@ vicious.register(volumewidget, vicious.widgets.volume,
 pacwidget = wibox.widget.textbox()
 
 pacimg = wibox.widget.imagebox()
-pacimg:set_image(awful.util.getdir("config") .. "/icons/pacman.png")
+pacimg:set_image(icons_dir .. "pacman.png")
 
 pacwidget_t = awful.tooltip({ objects = { pacwidget},})
 
@@ -285,7 +291,7 @@ weatherwidget = wibox.widget.textbox()
 weather_t = awful.tooltip({ objects = { weatherwidget },})
 
 weatherimg = wibox.widget.imagebox()
-weatherimg:set_image(awful.util.getdir("config") .. "/icons/dish.png")
+weatherimg:set_image(icons_dir .. "dish.png")
 
 vicious.register(weatherwidget, vicious.widgets.weather,
                 function (widget, args)
@@ -308,7 +314,7 @@ vicious.register(weatherwidget, vicious.widgets.weather,
 --vicious.register(memwidget, vicious.widgets.mem, "$1% ($2MB/$3MB)", 13)         
 
 memimg = wibox.widget.imagebox()
-memimg:set_image(awful.util.getdir("config") .. "/icons/mem.png")
+memimg:set_image(icons_dir .. "mem.png")
 
 -------------------------------------
 -- Memory usafe (progressbar)
@@ -347,15 +353,15 @@ vicious.register(fswidgethome, vicious.widgets.fs, "/home: ${/home used_gb} / ${
 -- fs img
 -------------------------------------
 fsimg = wibox.widget.imagebox()
-fsimg:set_image(awful.util.getdir("config") .. "/icons/fs.png")
+fsimg:set_image(icons_dir .. "fs.png")
 
 -------------------------------------
 -- Network usage widget
 -------------------------------------
 dnicon = wibox.widget.imagebox()
 upicon = wibox.widget.imagebox()
-dnicon:set_image(awful.util.getdir("config") .. "/icons/down.png")
-upicon:set_image(awful.util.getdir("config") .. "/icons/up.png")
+dnicon:set_image(icons_dir .. "down.png")
+upicon:set_image(icons_dir .. "up.png")
 
 netwidget = wibox.widget.textbox()
 -- Register widget
@@ -393,7 +399,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 --vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")
 
 cpuimg = wibox.widget.imagebox()
-cpuimg:set_image(awful.util.getdir("config") .. "/icons/cpu.png")
+cpuimg:set_image(icons_dir .. "cpu.png")
 
 
 

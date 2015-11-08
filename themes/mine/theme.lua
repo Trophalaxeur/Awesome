@@ -113,7 +113,7 @@ theme.taglist_squares_unsel = theme.default .. "/taglist/squarez.png"
 --theme.taglist_squares_resize = "false"
 -- }}}
 
--- {{{ Misc
+-- {{{ Icons
 theme.awesome_icon           = theme.default .. "/awesome-icon.png"
 theme.menu_submenu_icon      = "/usr/share/awesome/themes/default/submenu.png"
 -- }}}
