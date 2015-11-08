@@ -481,7 +481,12 @@ for s = 1, screen.count() do
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons, {
+      tasklist_disable_icon = true,
+      bg_image_normal = beautiful.tasklist_bg_normal_img,
+      bg_image_focus = beautiful.tasklist_bg_focus_img
+    })
+
 
     -- create TOP WiBox
     mywibox[s] = awful.wibox({ position = "top", screen = s, border_width=0, height=16})
