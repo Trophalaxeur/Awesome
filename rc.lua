@@ -132,11 +132,14 @@ mylibreofficemenu = {
 mymainmenu = awful.menu({
   items = {
     { "awesome", myawesomemenu, beautiful.awesome_icon },
-		{ "LibreOffice", mylibreofficemenu, icons_dir .. "apps/libreoffice.png"},
+	{ "LibreOffice", mylibreofficemenu, icons_dir .. "apps/libreoffice.png"},
     { "Gimp", "gimp", icons_dir .. "apps/Gimp.png"},
-		{ "Skype", "skype&", icons_dir .. "apps/Skype.png"},
+	{ "Skype", "skype&", icons_dir .. "apps/Skype.png"},
     { "Terminal", terminal, icons_dir .. "apps/Terminal.png"},
-    { "Web Browser", browser, icons_dir .. "apps/Firefox.png" }
+    { "Atom", "atom", icons_dir .. "apps/atom.png"},
+    { "VSCode", "code", icons_dir .. "apps/vscode.png"},
+    { "Firefox", browser, icons_dir .. "apps/Firefox.png" },
+    { "Chromium", "chromium", icons_dir .. "apps/chromium.png" }
   }
 })
 
@@ -153,16 +156,6 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 ------------------------------------------------------------------------------------------
 
 -- {{{ Wibox
-
--- Separators
-spacer    = wibox.widget.textbox()
-separator = wibox.widget.textbox()
-shizu = wibox.widget.textbox()
-shatzi = wibox.widget.textbox()
-spacer.text     = "              "
-separator.text  = "|"
-shizu.text = "   "
-shatzi.text = " "
 
 -------------------------------------
 -- Create a batwidget
@@ -508,15 +501,10 @@ for s = 1, screen.count() do
     if s==1 then upper_right_layout:add(mysystray) end
 --    upper_right_layout:add(mytextclock)
     upper_right_layout:add(datewidget)
-    upper_right_layout:add(shatzi) 
     upper_right_layout:add(weatherwidget)
-    upper_right_layout:add(shatzi)
     upper_right_layout:add(weatherimg)
-    upper_right_layout:add(shatzi)
     upper_right_layout:add(mygmail)
-    upper_right_layout:add(shatzi)
     upper_right_layout:add(mygmailimg)
-    upper_right_layout:add(shatzi)
     upper_right_layout:add(mylayoutbox[s])
     
     -- Now, bring it all together (with the tasklist in the middle)
@@ -534,46 +522,28 @@ for s = 1, screen.count() do
 
 	-- Widgets that are aligned to the left
 	local bottom_left_layout=wibox.layout.fixed.horizontal()
-	bottom_left_layout:add(spacer)
 	bottom_left_layout:add(mpdwidget)
 
    -- Widgets that are aligned to the middle
-   local bottom_middle_layout=wibox.layout.fixed.horizontal()
+   local bottom_middle_layout = wibox.layout.fixed.horizontal()
    bottom_middle_layout:add(pacimg)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(pacwidget)
-   bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(memimg)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(memwidget)
-   bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(cpuimg)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(cpuwidget)
-   bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(fsimg)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(fswidgetroot)
-   bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(fsimg)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(fswidgethome)
---   bottom_middle_layout:add(spacer)
---   bottom_middle_layout:add(fsimg)
---   bottom_middle_layout:add(shatzi)
---   bottom_middle_layout:add(fswidgetvar)
-   bottom_middle_layout:add(spacer)
    bottom_middle_layout:add(upicon)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(netwidget)
-   bottom_middle_layout:add(shatzi)
    bottom_middle_layout:add(dnicon)
 
 	-- Widgets that are aligned on the right
 	local bottom_right_layout=wibox.layout.fixed.horizontal()
 	bottom_right_layout:add(myvolimg)
 	bottom_right_layout:add(volumewidget)
-	bottom_right_layout:add(spacer)
 
    -- Now, bring it all together (with the tasklist in the middle)
    local bottom_layout = wibox.layout.align.horizontal()
@@ -585,29 +555,6 @@ for s = 1, screen.count() do
    mywiboxbottom[s]:set_widget(bottom_layout)
 
 
-    -- Add widget to the wibox - order matters
---    mywibox[s].widgets = {
---        {
---            mylauncher,
---            mytaglist[s],
---            mypromptbox[s],
---            layout = awful.widget.layout.horizontal.leftright
---        },
---        s == 1 and mysystray or nil,
---        mytextclock, volumecfg.widget, myvolimg, shatzi, weatherwidget, shatzi, weatherimg, shatzi, mygmail, shatzi, mygmailimg, shatzi, mpdwidget,
---        mytasklist[s],
---        layout = awful.widget.layout.horizontal.rightleft
---    }
-
-
-	-- create BOTTOM wibox
---	mywiboxbottom[s] = awful.wibox({ position = "bottom", screen = s})
-
-	-- Add widget to the wibox - order matters
---	mywiboxbottom[s].widgets = {
---		shizu, shizu, shizu, shizu, shizu, shizu, shizu, batimg, shatzi, batwidget, spacer, pacimg, shatzi, pacwidget, spacer, memimg, shatzi, memwidget, spacer, cpuimg, shatzi, cpuwidget, spacer, fsimg, shatzi, fswidgetroot, spacer, fsimg, shatzi, fswidgethome, spacer, fsimg, shatzi, fswidgetvar, spacer, upicon, shatzi, netwidget, shatzi, dnicon,
---		layout = awful.widget.layout.horizontal.leftright
---	}
 end
 -- }}}
 
